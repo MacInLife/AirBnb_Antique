@@ -1,24 +1,21 @@
-import {combineReducers} from 'redux';
-const initialState = {
-  categories: [],
-  experiences: [],
-  homes: [],
-  popular: [],
-};
-const listingsReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'SET_LISTINGS':
-      return {
-        ...state,
-        categories: action.payload.categories,
-        experiences: action.payload.experiences.listings,
-        homes: action.payload.homes.listings,
-        popular: action.payload.popular.listings,
-      };
-    default:
-      return state;
-  }
-};
+import { combineReducers } from 'redux';
+import listings from "./listings"
+import app from "./app"
+
+/**
+ * combineReducers() permet de combiner les différents reducers, ce qui est plus pratique pour organiser les reducers.
+ *
+ * Dans notre cas le state général de l'application aura cette forme
+ * {
+ *   listings : {
+ *     experiences: [....]
+ *   },
+ *   app: {
+ *     isLoading: true
+ *   }
+ * }
+ */
 export default combineReducers({
-  listings: listingsReducer,
+  listings,
+  app
 });

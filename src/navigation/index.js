@@ -1,15 +1,20 @@
 import LoggedOut from '../screens/LoggedOut';
 import Login from '../screens/Login';
+import AuthLoadingScreen from '../screens/AuthLoading';
 import LoggedInTabNavigator from '../navigation/LoggedInTabNavigator';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';;
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 // createStackNavigator() crée l'arbre de navigation
 // Le premier écran déclaré est l'écran de démarrage par défaut de l'application (ici LoginScreen)
-const MainStackNavigator = createStackNavigator(
+const AuthNavigator = createStackNavigator({
+  LoggedOut: { screen: LoggedOut },
+  Login: { screen: Login }
+})
+const MainStackNavigator = createSwitchNavigator(
   {
-    LoggedOut: { screen: LoggedOut },
-    Login: { screen: Login },
+    AuthLoading: { screen: AuthLoadingScreen },
+    Auth: AuthNavigator,
     ExploreContainer: { screen: LoggedInTabNavigator },
   },
   {

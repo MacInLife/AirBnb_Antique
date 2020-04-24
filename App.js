@@ -1,15 +1,17 @@
-import React, {Component} from 'react';
-import Navigation from './src/navigation';
-import reducers from './src/reducers';
-import {createStore} from 'redux';
-import {Provider} from 'react-redux';
-import {composeWithDevTools} from 'redux-devtools-extension';
-const store = createStore(reducers, composeWithDevTools());
+import React, { Component } from 'react';
+import MainScreen from './src/screens/Main';
+import { store, persistor } from './src/store';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react'
+
+
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Navigation />
+        <PersistGate loading={null} persistor={persistor}>
+          <MainScreen />
+        </PersistGate>
       </Provider>
     );
   }
