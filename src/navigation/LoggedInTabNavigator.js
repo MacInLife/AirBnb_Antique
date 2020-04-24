@@ -29,25 +29,49 @@ export default createBottomTabNavigator(
     Saved: {
       screen: SavedContainer,
       navigationOptions: {
-        tabBarLabel: 'SAVED'
+        tabBarLabel: 'SAVED',
+        tabBarIcon: (
+          <View>
+            <Icon name="star" size={20} />
+          </View>
+        ),
+        //tabBarIcon: SearchIcon, // On peut mettre ici une icone
       },
     },
     Trips: {
       screen: TripsContainer,
       navigationOptions: {
         tabBarLabel: 'TRIPS',
+        tabBarIcon: (
+          <View>
+            <Icon name="plane" size={20} />
+          </View>
+        ),
+        //tabBarIcon: SearchIcon, // On peut mettre ici une icone
       },
     },
     Inbox: {
       screen: InboxContainer,
       navigationOptions: {
         tabBarLabel: 'INBOX',
+        tabBarIcon: (
+          <View>
+            <Icon name="inbox" size={20} />
+          </View>
+        ),
+        //tabBarIcon: SearchIcon, // On peut mettre ici une icone
       },
     },
     Profile: {
       screen: ProfileContainer,
       navigationOptions: {
         tabBarLabel: 'PROFILE',
+        tabBarIcon: (
+          <View>
+            <Icon name="user" size={20} />
+          </View>
+        ),
+        //tabBarIcon: SearchIcon, // On peut mettre ici une icone
       },
     },
   },
