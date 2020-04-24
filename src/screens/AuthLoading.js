@@ -1,8 +1,8 @@
 import React from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+import { connect } from 'react-redux'
 import SplashScreen from 'react-native-splash-screen'
 
-export default class AuthLoadingScreen extends React.Component {
+class AuthLoadingScreen extends React.Component {
     componentDidMount() {
         SplashScreen.hide();
         this._bootstrapAsync();
@@ -10,11 +10,10 @@ export default class AuthLoadingScreen extends React.Component {
 
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
-        const userToken = await AsyncStorage.getItem('userToken');
-
+        const { token } = this.props
         // This will switch to the ExploreContainer screen or Auth screen 
         // screen will be unmounted and thrown away.
-        this.props.navigation.navigate(userToken ? 'ExploreContainer' : 'Login');
+        this.props.navigation.navigate(token ? 'ExploreContainer' : 'Login');
     };
 
     // Render any loading content that you like here
@@ -22,3 +21,8 @@ export default class AuthLoadingScreen extends React.Component {
         return null
     }
 }
+const mapStateToProps = state => ({
+    token: state.user.token
+});
+
+export default connect(mapStateToProps)(AuthLoadingScreen)

@@ -58,7 +58,7 @@ class Login extends Component {
     }
   };
   login = () => {
-    const { loading } = this.props
+    const { loading, setToken } = this.props
     const { password, email } = this.state
 
     // On affiche le loader
@@ -76,11 +76,8 @@ class Login extends Component {
         })
 
         // On sauvegarde du token dans le local storage
-        return AsyncStorage
-          .setItem('userToken', response.authorization)
-          .then(() => {
-            this.props.navigation.navigate('ExploreContainer')
-          })
+        setToken(response.authorization)
+        this.props.navigation.navigate('ExploreContainer')
 
       })
 
@@ -139,5 +136,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loading: (isLoading) => dispatch(Actions.loading(isLoading)),
+  setToken: (token) => dispatch(Actions.login(token)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,19 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
-  Image,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 import styles from './styles';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Actions} from '../actions';
+import { Actions } from '../actions';
 
 class ProfileContainer extends Component {
-  static navigationOptions = ({navigation}) => ({
+
+  static navigationOptions = ({ navigation }) => ({
     header: props => (
       <View style={styles.containerConnect}>
         <Icon size={20} style={styles.iconclose} name="close"></Icon>
@@ -24,15 +23,32 @@ class ProfileContainer extends Component {
     ),
   });
 
+  doLogout = () => {
+    const { logout, navigation } = this.props
+    logout()
+    navigation.navigate('Login')
+  }
+
   render() {
     return (
       <ScrollView>
         <View>
           <Text style={styles.titres}>Profile container</Text>
+          <TouchableOpacity onPress={this.doLogout}>
+            <Text>Déconnexion</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );
   }
 }
 
-export default ProfileContainer;
+
+const mapStateToProps = state => ({
+  token: state.user.token
+});
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(Actions.logout())
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileContainer)

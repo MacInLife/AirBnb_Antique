@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import listings from "./listings"
 import app from "./app"
+import user from "./user"
 
 /**
  * combineReducers() permet de combiner les différents reducers, ce qui est plus pratique pour organiser les reducers.
@@ -15,7 +16,9 @@ import app from "./app"
  *   }
  * }
  */
+
 export default combineReducers({
   listings,
-  app
+  app,
+  user
 });
