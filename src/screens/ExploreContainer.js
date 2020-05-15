@@ -1,70 +1,41 @@
-import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import styles from './styles';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Categories from '../components/categories'; //Intégration du composants Catégories
 import Experiences from '../components/experiences';
 import Homes from '../components/homes';
 import Popular from '../components/popular';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Actions } from '../actions';
+import {Actions, requestGetListings} from '../actions';
 
 class ExploreContainer extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     header: props => (
       <View style={styles.containerConnect}>
-        <Icon size={20} style={styles.iconclose} name="close"></Icon>
+        <Icon size={20} style={styles.iconclose} name="close" />
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={styles.connect}>Connexion</Text>
         </TouchableOpacity>
       </View>
-    )
+    ),
   });
 
   /**
    * Nous n'avons plus besoin d'initialiser un state local au component.
-   * isLoading erst 
+   * isLoading erst
    */
 
   componentDidMount() {
-    const { setListings, loading } = this.props;
-
-    // Affichage du loading spinner par l'appel de l'action loading()
-    loading(true)
-
-    //Récupération des données contenus dans l'URL
-    return fetch('https://my-json-server.typicode.com/amallo/bbnb-sample/blob/master/experiences') // requête vers l'API
-      .then((response) => {
-        // Si un code erreur a été détecté on déclenche une erreur
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response;
-      })
-      .then(response => response.json())
-      .then(response => {
-        // On cache le loading spinner à la fin de la requête
-        loading(false)
-        setListings(response);
-      })
-      .catch((err) => {
-        console.log('An error occured', err)
-        // En cas d'erreur on cache le loading spinner également
-        loading(false)
-      })
+    const {requestGetListings} = this.props;
+    return requestGetListings();
   }
-
 
   render() {
     // isLoading est maintenant chargé depuis le reducer
-    const { categories, experiences, homes, popular, isLoading } = this.props;
+    const {categories, experiences, homes, popular, isLoading} = this.props;
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         <ScrollView>
           <View>
             <Text style={styles.titres}>Explore Airbnb</Text>
@@ -88,7 +59,6 @@ class ExploreContainer extends Component {
         </ScrollView>
       </View>
     );
-
   }
 }
 const mapStateToProps = state => ({
@@ -100,7 +70,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setListings: results => dispatch(Actions.setListings(results)),
-  loading: (isLoading) => dispatch(Actions.loading(isLoading)),
+  requestGetListings: () => dispatch(requestGetListings()),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(ExploreContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ExploreContainer);
