@@ -1,3 +1,5 @@
+import {login as loginService} from '../services';
+
 export const Types = {
   SET_LISTINGS: 'SET_LISTINGS',
   LOADING: 'LOADING',
@@ -9,19 +11,36 @@ export const Actions = {
     type: Types.SET_LISTINGS,
     payload: results,
   }),
-  loading: (isLoading) => ({
+  loading: isLoading => ({
     type: Types.LOADING,
     payload: {
-      isLoading
-    }
+      isLoading,
+    },
   }),
   logout: () => ({
-    type: Types.LOGOUT
+    type: Types.LOGOUT,
   }),
-  login: (token) => ({
+  login: token => ({
     type: Types.LOGIN,
     payload: {
-      token
-    }
-  })
+      token,
+    },
+  }),
 };
+
+export function requestLogin(email, password) {
+  return function(dispatch) {
+    dispatch(Actions.loading(true));
+    return loginService(email, password)
+      .then(response => {
+        // On cache le loader
+        dispatch(Actions.loading(false));
+        // On sauvegarde du token dans le local storage
+        dispatch(Actions.login(response.authorization));
+      })
+      .catch(err => {
+        dispatch(Actions.loading(false));
+        throw err;
+      });
+  };
+}

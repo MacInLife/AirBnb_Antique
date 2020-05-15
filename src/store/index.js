@@ -1,7 +1,7 @@
-import {createStore, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
 import {persistStore, persistReducer} from 'redux-persist';
 import {composeWithDevTools} from 'redux-devtools-extension';
-
+import thunk from 'redux-thunk';
 import reducers from '../reducers';
 
 // On déclare le moteur de stockage utilisé par redux-persist
@@ -11,7 +11,6 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
 };
-const persistedReducer = persistReducer(persistConfig, reducers);
 const simpleLogger = store => next => action => {
   console.log(action);
   next(action);
@@ -28,12 +27,14 @@ const incrementLogger = store => next => action => {
   }
   next(action);
 };
-
+// On liste ici les middleware dont on a besoin
+//
+const middlewares = [thunk, simpleLogger, extendedLogger, incrementLogger];
 // composeWithDevTools() permet le debuggage dans React Native Debugger
 //
-export const store = createStore(
-  persistedReducer,
-  __DEV__ ? composeWithDevTools() : undefined,
-  applyMiddleware(simpleLogger, extendedLogger, incrementLogger),
-);
+// composeWithDevTools() permet le debuggage dans React Native Debugger
+//
+const enhancers = [composeWithDevTools({})(applyMiddleware(...middlewares))];
+const persistedReducer = persistReducer(persistConfig, reducers);
+export const store = createStore(persistedReducer, compose(...enhancers));
 export const persistor = persistStore(store);
