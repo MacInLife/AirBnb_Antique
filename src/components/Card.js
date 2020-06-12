@@ -1,6 +1,6 @@
 //import {experiences} from '../data/listings';
-import React, {Component} from 'react';
-import {Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import { Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../styles/colors';
@@ -19,13 +19,14 @@ export default class Card extends Component {
       stars,
       color,
       size,
+      onPress,
+      colorTitleCard
     } = this.props;
-    const {colorTitleCard} = this.props;
     return (
-      <View style={styles.cardExp}>
+      <TouchableOpacity style={styles.cardExp} onPress={onPress}>
         <Image source={imageCard} style={styles.imageExp} />
         <Heart></Heart>
-        <Text style={{color: colorTitleCard, marginBottom: 5}}>
+        <Text style={{ color: colorTitleCard, marginBottom: 5 }}>
           {titreCard}
         </Text>
         <Text style={styles.paragrapheExp}>{paragraphe}</Text>
@@ -34,7 +35,7 @@ export default class Card extends Component {
           <Stars votes={stars} size={size} color={colors.green01} />
           <Text style={styles.prixExp}>{' ' + stars}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

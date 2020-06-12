@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "767207383724",
+    "firebase_url": "https://airbnbantique.firebaseio.com",
+    "project_id": "airbnbantique",
+    "storage_bucket": "airbnbantique.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767207383724:android:d13c8f99de949b9fe7b509",
+        "android_client_info": {
+          "package_name": "com.bbnbsample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767207383724-1gbpvf62630p9kaibodaq3mv048asgdd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bbnbsample",
+            "certificate_hash": "637cd67b378a3ccbed043e2ad9c8cb4e0a372f88"
+          }
+        },
+        {
+          "client_id": "767207383724-r1jf7p2f190dr68te5svseav5bffnbp9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5pgGKBJee7tndLVbn_AcOLG-TabQtQow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767207383724-r1jf7p2f190dr68te5svseav5bffnbp9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

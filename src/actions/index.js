@@ -1,10 +1,17 @@
-import {login as loginService} from '../services';
+import {
+  login as loginService,
+  registerFcm as registerFcmService,
+  requestFcmUserPermission as requestFcmUserPermissionService,
+} from '../services';
 
 export const Types = {
+  SET_PERMISSIONS: 'SET_PERMISSIONS',
   SET_LISTINGS: 'SET_LISTINGS',
   LOADING: 'LOADING',
   LOGOUT: 'LOGOUT',
   LOGIN: 'LOGIN',
+  FCM_TOKEN: 'FCM_TOKEN',
+  FILTER_EXPERIENCES: 'FILTER_EXPERIENCES',
 };
 export const Actions = {
   setListings: results => ({
@@ -20,33 +27,36 @@ export const Actions = {
   logout: () => ({
     type: Types.LOGOUT,
   }),
-  login: token => ({
+  login: (email, token) => ({
     type: Types.LOGIN,
+    payload: {
+      email,
+      token,
+    },
+  }),
+  filterExperiences: (criteria, sortCriteria) => ({
+    type: Types.FILTER_EXPERIENCES,
+    payload: {
+      criteria,
+      sort: sortCriteria,
+    },
+  }),
+  fcmToken: token => ({
+    type: Types.FCM_TOKEN,
     payload: {
       token,
     },
   }),
+  setPermissions: permissions => ({
+    type: Types.SET_PERMISSIONS,
+    payload: {
+      ...permissions,
+    },
+  }),
 };
 
-export function requestLogin(email, password) {
-  return function(dispatch) {
-    dispatch(Actions.loading(true));
-    return loginService(email, password)
-      .then(response => {
-        // On cache le loader
-        dispatch(Actions.loading(false));
-        // On sauvegarde du token dans le local storage
-        dispatch(Actions.login(response.authorization));
-      })
-      .catch(err => {
-        dispatch(Actions.loading(false));
-        throw err;
-      });
-  };
-}
-
 export function requestGetListings() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch(Actions.loading(true));
     //Récupération des données contenus dans l'URL
     return fetch(
@@ -62,15 +72,57 @@ export function requestGetListings() {
       .then(response => response.json())
       .then(response => {
         // On cache le loading spinner à la fin de la requête
-        // On cache le loader
         dispatch(Actions.loading(false));
         dispatch(Actions.setListings(response));
       })
       .catch(err => {
         console.log('An error occured', err);
         // En cas d'erreur on cache le loading spinner également
-        // On cache le loader
         dispatch(Actions.loading(false));
       });
+  };
+}
+
+export function requestLogin(email, password) {
+  return function(dispatch) {
+    dispatch(Actions.loading(true));
+    return loginService(email, password)
+      .then(response => {
+        // On cache le loader
+        dispatch(Actions.loading(false));
+
+        // On sauvegarde du token dans le local storage
+        dispatch(Actions.login(response.user.email, response.authorization));
+      })
+      .catch(err => {
+        dispatch(Actions.loading(false));
+        throw err;
+      });
+  };
+}
+
+function requestFcmUserPermission() {
+  return function(dispatch) {
+    return requestFcmUserPermissionService().then(enabled => {
+      dispatch(
+        Actions.setPermissions({
+          notification: enabled,
+        }),
+      );
+    });
+  };
+}
+function registerFcm() {
+  return function(dispatch) {
+    return registerFcmService().then(token => {
+      console.log('FCM token is', token);
+      dispatch(Actions.fcmToken(token));
+    });
+  };
+}
+export function bootstrap() {
+  return async function(dispatch) {
+    await requestFcmUserPermission()(dispatch);
+    await registerFcm()(dispatch);
   };
 }

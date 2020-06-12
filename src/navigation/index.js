@@ -1,7 +1,7 @@
 import LoggedOut from '../screens/LoggedOut';
 import Login from '../screens/Login';
 import AuthLoadingScreen from '../screens/AuthLoading';
-import LoggedInTabNavigator from '../navigation/LoggedInTabNavigator';
+import LoggedInNavigator from './LoggedInNavigator';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
@@ -15,7 +15,7 @@ const MainStackNavigator = createSwitchNavigator(
   {
     AuthLoading: { screen: AuthLoadingScreen },
     Auth: AuthNavigator,
-    ExploreContainer: { screen: LoggedInTabNavigator },
+    ExploreContainer: LoggedInNavigator,
   },
   {
     headerMode: 'screen', // Ce paramètre spécifie qu'on va définir des "header" (en-tête) pour chaque écran
